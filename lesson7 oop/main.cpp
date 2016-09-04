@@ -15,7 +15,7 @@ public:
 
 void Circle::draw()
 {
-	glColor4f(0.0, 0.0, 1.0, this->alpha);
+	glColor4f(0.0, 0.0, 1.0, this->alpha); // transparency 
 	glBegin(GL_LINE_LOOP);
 	for (float i = 0.0; i<2 * 3.14; i += 3.14 / 18)
 	{
@@ -31,7 +31,7 @@ float WinHei = 400.0;
 
 void Draw()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT); //on
 	glEnable(GL_ALPHA);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -48,7 +48,7 @@ void Draw()
 			++i;
 		}
 	}
-	glDisable(GL_BLEND);
+	glDisable(GL_BLEND); //off 
 	glDisable(GL_ALPHA);
 	glutSwapBuffers();
 }
@@ -64,12 +64,12 @@ void Timer(int value)
 	glutTimerFunc(40, Timer, 0);
 }
 
-void Timer2(int)
+void Timer2(int) //adding Circle from time to time
 {
 	Circle c(rand() % int(WinWid) - WinWid / 2, rand() % int(WinHei) - WinHei / 2, rand() % 20 + 2);
 	circ.push_back(c);
 	glutPostRedisplay();
-	glutTimerFunc(1000, Timer2, 0);
+	glutTimerFunc(100, Timer2, 0);
 }
 
 void Initialize()
@@ -81,19 +81,23 @@ void Initialize()
 	glMatrixMode(GL_MODELVIEW);
 }
 
-int main(int argc, char** argv)
+void InitializeGlut(int argc, char** argv)
 {
-	srand(time(0));
-	for (int i = 2; i<2 + rand() % 5; i++)
-	{
-		Circle c(rand() % int(WinWid) - WinWid / 2, rand() % int(WinHei) - WinHei / 2, rand() % 20 + 2);
-		circ.push_back(c);
-	}
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 	glutInitWindowSize(WinWid, WinHei);
 	glutInitWindowPosition(100, 200);
 	glutCreateWindow("Lesson 07");
+}
+
+int main(int argc, char** argv)
+{
+	for (int i = 2; i<2 + rand() % 5; i++)
+	{
+		Circle c(rand() % int(WinWid) - WinWid / 2, rand() % int(WinHei) - WinHei / 2, rand() % 20 + 2);
+		circ.push_back(c);
+	}
+	InitializeGlut(argc, argv);
 	glutDisplayFunc(Draw);
 	glutTimerFunc(40, Timer, 0);
 	glutTimerFunc(1000, Timer2, 0);
